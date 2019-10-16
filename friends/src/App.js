@@ -9,9 +9,11 @@ function App() {
   return (
     <div className="App">
       <Router>
+        <h1>My Friends List</h1>
         <Route path="/login" component={Login} />
         <PrivateRoute exact path="/" component={FriendList} />
       </Router>
+
     </div>
   );
 }
