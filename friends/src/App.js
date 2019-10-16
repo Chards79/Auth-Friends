@@ -7,10 +7,12 @@ import PrivateRoute from './components/PrivateRoute';
 
 function App() {
   return (
-    <Router>
-      <Route path="/login" component={Login} />
-      <PrivateRoute exact path="/" component={FriendList} />
-    </Router>
+    <div className="App">
+      <Router>
+        <Route path="/login" component={Login} />
+        <PrivateRoute exact path="/" component={FriendList} />
+      </Router>
+    </div>
   );
 }
 

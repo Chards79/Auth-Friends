@@ -3,7 +3,7 @@ import axiosWithAuth from '../utils/axiosWithAuth';
 import FriendForm from './FriendForm';
 
 export default function FriendList() {
-    const [friends, setFriends] = useState([]);
+    const [friends, setFriends] = React.useState([]);
     const [editingFriend, setEditingFriend] = React.useState();
 
     const fetchFriends = () => {
@@ -17,24 +17,25 @@ export default function FriendList() {
     };
 
     React.useEffect(() => {
-        fetchFriends()
+        fetchFriends();
     }, []);
 
-    const deleteFriend = () => {
+    const deleteFriend = id => {
         axiosWithAuth()
             .delete(`/api/friends/${id}`)
             .then(res => {
                 console.log(res);
                 setFriends(res.data);
-            }).catch(err => console.log(err.response));
+            })
+            .catch(err => console.log(err.response));
     };
 
     const editFriend = friendObj => {
         setEditingFriend(friendObj);
-    }
+    };
 
     return (
-        <div>
+        <div className="whole-form">
             <FriendForm
                 editingFriend={editingFriend}
                 setFriends={setFriends}
@@ -42,18 +43,20 @@ export default function FriendList() {
             />
             {friends.map(friendObj => {
                 return (
-                    <div key={friendObj.id}>
+                    <div className="friend-card" key={friendObj.id}>
                         {" "}
                         <p>Name: {friendObj.name}</p>
                         <p>Age: {friendObj.age}</p>
                         <p>Email: {friendObj.email}</p>
-                        <button onClick={() => editFriend(friendObj)} >EDIT</button>{" "}
-                        <button onClick={() => deleteFriend(friendObj.id)}>DELETE</button>{" "}
-
+                        <div className="button-group">
+                            <button onClick={() => editFriend(friendObj)} >EDIT</button>{" "}
+                            <button onClick={() => deleteFriend(friendObj.id)}>DELETE</button>{" "}
+                        </div>
                     </div>
                 );
             })}
-            <button onClick={fetchFriends}>Update!</button>
+
+            <button className="update-button" onClick={fetchFriends}>Update!</button>
         </div>
     );
 }

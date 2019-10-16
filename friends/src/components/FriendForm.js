@@ -2,7 +2,13 @@ import React from "react";
 import axiosWithAuth from "../utils/axiosWithAuth";
 
 export default function FriendForm(props) {
-    const [form, setForm] = React.useState(() => {
+    const [form, setForm] = React.useState({ name: "", age: "", email: "" });
+
+    const handleChanges = e => {
+        setForm({ ...form, [e.target.name]: e.target.value });
+    };
+
+    React.useEffect(() => {
 
         if (props.editingFriend) {
             setForm({
@@ -13,23 +19,21 @@ export default function FriendForm(props) {
 
         } else {
             setForm({ name: "", age: "", email: "" });
-        };
+        }
     }, [props.editingFriend]);
-
-    const handleChanges = e => {
-        setForm({ ...form, [e.target.name]: e.target.value });
-    };
 
     const submitHandler = e => {
         e.preventDefault();
 
         if (props.editingFriend) {
-            axiosWithAuth().put(`/api/friends/${props.editingFriend.id}`, form).then(res => {
-                console.log("EDIT", res)
-                props.setFriends(res.data)
-                setForm({ name: "", age: "", email: "" });
-                props.setEditingFriend(null);
-            })
+            axiosWithAuth()
+                .put(`/api/friends/${props.editingFriend.id}`, form)
+                .then(res => {
+                    console.log("EDIT", res);
+                    props.setFriends(res.data);
+                    setForm({ name: "", age: "", email: "" });
+                    props.setEditingFriend(null);
+                });
 
         } else {
             axiosWithAuth()
@@ -45,18 +49,39 @@ export default function FriendForm(props) {
 
     const closeEdit = e => {
         e.preventDefault();
-        props.setEditingFriend(null)
-    }
+        props.setEditingFriend(null);
+    };
 
     return (
-        <div>
+        <div className="input-form">
             <form onSubmit={submitHandler}>
-                <input required type="text" name="name" value={form.name} onChange={handleChanges} />
-                <input required type="number" name="age" value={form.age} onChange={handleChanges} />
-                <input required type="email" name="email" value={form.email} onChange={handleChanges} />
+                <input
+                    required
+                    type="text"
+                    name="name"
+                    placeholder="Name"
+                    value={form.name}
+                    onChange={handleChanges}
+                />
+                <input
+                    required
+                    type="number"
+                    name="age"
+                    placeholder="Age"
+                    value={form.age}
+                    onChange={handleChanges}
+                />
+                <input
+                    required
+                    type="email"
+                    name="email"
+                    placeholder="Email"
+                    value={form.email}
+                    onChange={handleChanges}
+                />
                 <button type="submit">{props.editingFriend ? "Submit edit" : "Add Friend"}</button>
                 <button onClick={closeEdit}>Cancel</button>
             </form>
         </div>
-    )
+    );
 }

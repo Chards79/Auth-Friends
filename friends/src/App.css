@@ -20,3 +20,38 @@
 .App-link {
   color: #09d3ac;
 }
+
+.whole-form {
+display: flex;
+align-items: center;
+flex-direction: column;
+}
+
+.friend-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 20px;
+  padding: 20px;
+  width: 25%;
+  border: ridge 2px bisque;
+  background-color: aqua;
+  font-weight: bold;
+  font-style: italic;
+}
+
+.button-group {
+  margin: 10px;
+  padding: 10px;
+  border: ridge 2px lightseagreen;
+  width: 35%;
+  background-color: cadetblue;
+ }
+
+.input-form {
+  margin: 20px;
+}
+
+.update-button {
+  margin: 30px;
+}
