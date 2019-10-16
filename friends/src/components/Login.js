@@ -1,61 +1,47 @@
 import React from 'react';
-
 import { axiosWithAuth } from '../utils/axiosWithAuth';
-import { Redirect } from 'react-router-dom';
 
-class Login extends React.Component {
-    state = {
-        credentials: {
-            username: '',
-            password: ''
-        }
+const Login = () => {
+    const [form, setForm] = React.useState({ username: "", password: "" });
+
+    const handleChanges = e => {
+        setForm({ ...form, [e.target.name]: e.target.value });
     };
 
-    handleChange = e => {
-        this.setState({
-            credentials: {
-                ...this.state.credentials,
-                [e.target.name]: e.target.value
-            }
-        });
-    };
-
-    login = e => {
+    const login = e => {
         e.preventDefault();
-
         axiosWithAuth()
-            .post('/api/login', this.state.credentials)
+            .post("/api/login", form)
             .then(res => {
-                localStorage.setItem('token', res.data.payload);
-                this.props.history.push('/protected');
+                console.log(res);
+                localStorage.setItem("token", res.data.payload);
+                props.history.push("/");
             })
-            .catch(err => console.log(err.response));
+            .catch(err => console.log(err.response)
+        setForm({ username: "", password: "" })
     };
 
-    render() {
-        if (localStorage.getItem('token')) {
-            return <Redirect to="protected" />;
-        }
-        return (
-            <div>
-                <form onSubmit={this.login}>
-                    <input
-                        type="text"
-                        name="username"
-                        value={this.state.credentials.username}
-                        onChange={this.handleChange}
-                    />
-                    <input
-                        type="password"
-                        name="password"
-                        value={this.state.credentials.password}
-                        onChange={this.handleChange}
-                    />
-                    <button>Log in</button>
-                </form>
-            </div>
-        );
-    }
+    return (
+        <div>
+            <form onSubmit={login}>
+                {/* username */}
+                <input
+                    type="text"
+                    name="username"
+                    onChange={form.handleChanges}
+                    value={form.username}
+                />
+                <input
+                    type="password"
+                    name="password"
+                    onChange={form.handleChanges}
+                    value={form.password}
+                />
+                <button>Log in</button>
+            </form>
+        </div>
+    );
+}
 }
 
 export default Login;
